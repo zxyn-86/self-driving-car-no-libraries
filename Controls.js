@@ -10,6 +10,7 @@ class Controls
     }
 
     //the # means it is a private class
+    //the arrow thing basiaclly means function but means that this continues to refer to object 
     #addKeyboardListeners()
     {
         document.onkeydown = (event)=>
@@ -29,6 +30,8 @@ class Controls
                         this.reverse = true;
                         break;
                 }
+                //console.table(this);
+
             }
 
             document.onkeyup = (event)=>
@@ -48,8 +51,9 @@ class Controls
                         this.reverse = false;
                         break;
                 }
+                //console.table(this);
+
             }
-            console.table(this);
     }
 
 }
