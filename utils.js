@@ -22,3 +22,29 @@ function getIntersection(A,B,C,D){
 
     return null;
 }
+
+
+//the mod bit acts like a circular queue so when we reach 
+// length -1 it doesnt cause error it goes to index 0.
+function polysIntersect(poly1, poly2)
+{
+        console.log(poly1);
+        console.log(poly2[0].y);
+
+        
+        for(let i =0; i<poly1.length; i++)
+        {
+                for(let j =0; j<poly2.length; i++)
+                {
+                        const touch = getIntersection(
+                                poly1[i],
+                                poly1[(i+1) % poly1.length],
+                                poly2[j],
+                                poly2[(j+1)%poly2.length]
+                        );
+                        if(touch){return true;}
+
+                }
+        }
+        return false;
+}
