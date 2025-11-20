@@ -101,7 +101,7 @@ class Car
     {
         console.log(this.damaged)
         if(this.damaged){
-            ctx.fillStyle = "lightblue";
+            ctx.fillStyle = "gray";
         }
         else{
             ctx.fillStyle = "black";

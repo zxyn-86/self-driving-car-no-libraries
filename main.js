@@ -5,6 +5,8 @@ canvas.width = 200;
 const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width/2, canvas.width*0.9);
 const car = new Car(road.getLaneCentre(1),100,30,50);
+
+ console.log(road.borders[0].y)
 // car.sensor.update();
 // car.draw(ctx);
 
@@ -12,6 +14,7 @@ animate();
 
 function animate()
 {
+   
     car.update(road.borders);
     canvas.height = window.innerHeight;  //this resizes the canvas so the car looks like it smoving
     //by saving and translating we make it look as though the road is moving 
