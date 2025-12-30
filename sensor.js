@@ -102,7 +102,7 @@ class sensor
                 y: this.car.y - Math.cos(rayAngle)*this.rayLength
             };
             this.rays.push([start,end]);
-            console.log(this.rays[0][0]);
+           
 
         }
     }

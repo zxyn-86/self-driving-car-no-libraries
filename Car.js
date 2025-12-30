@@ -133,9 +133,8 @@ class Car
         
     }
     //this basically draws the car
-    draw(ctx, color)
+    draw(ctx, color, drawSensor = false)
     {
-        console.log(this.damaged)
         if(this.damaged){
             ctx.fillStyle = "gray";
         }
@@ -150,7 +149,7 @@ class Car
         }
         ctx.fill();
 
-        if(this.sensor)
+        if(this.sensor && drawSensor)
         {
             this.sensor.draw(ctx);
         }

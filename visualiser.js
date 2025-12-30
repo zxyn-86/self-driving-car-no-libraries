@@ -8,36 +8,33 @@ class Visualiser
         const width = ctx.canvas.width - margin*2;
         const height = ctx.canvas.height - margin*2;
 
-        Visualiser.drawLevel(ctx, network.levels[0], left, top, width, height);
+        const levelHeight = height/network.levels.length;
+        for(let i = network.levels.length-1; i>=0; i--)
+        {
+            const levelTop = top + lerp(
+                height-levelHeight,
+                0,
+                network.levels.length == 1 ? 0.5: i/(network.levels.length-1)
+            );
+
+            Visualiser.drawLevel(ctx, 
+                network.levels[i], 
+                left, levelTop, 
+                width, 
+                levelHeight,
+                i == network.levels.length-1 ? ['🠉','🠈','🠊','🠋']: []
+            );//arrows dont work for some reason
+        }
+    
     }
 
-    static drawLevel(ctx, level , left ,top ,width, height)
+    static drawLevel(ctx, level , left ,top ,width, height, outputLabels)
     {
-        const right = left +width;
-        const bottom = top +height;
+        const right = left + width;
+        const bottom = top + height;
 
-        const {inputs,outputs} = level;
+        const {inputs,outputs,weights,biases} = level;
         const nodeRadius = 18;
-        for(let i = 0; i<inputs.length; i++)
-        {
-            const x = lerp(Visualiser.#getNodeX(inputs,i,left,right));
-            ctx.beginPath();
-            ctx.arc(x,bottom,nodeRadius,0,Math.PI*2);
-            ctx.fillStyle = "white";
-            ctx.fill();
-        }
-
-
-        for(let i = 0; i<outputs.length; i++)
-        {
-            const x = lerp(Visualiser.#getNodeX(outputs,i,left,right));
-            ctx.beginPath();
-            ctx.arc(x,top,nodeRadius,0,Math.PI*2);
-            ctx.fillStyle = "white";
-            ctx.fill();
-        }
-
-
 
 
         for(let i=0; i<inputs.length; i++)
@@ -53,10 +50,59 @@ class Visualiser
                 );
 
                 ctx.lineWidth = 2;
-                ctx.strokeStyle = "yellow";
+                
+                ctx.strokeStyle = getRBGA(weights[i][j]);  
+                //this is so that we can adjust colour and transparency based on weights of nodes yellow is positive blue negative we adjust rbg accordingly
                 ctx.stroke();
             }
         }
+
+
+        for(let i = 0; i<inputs.length; i++)
+        {
+            const x = Visualiser.#getNodeX(inputs,i,left,right);
+            ctx.beginPath();
+            ctx.arc(x,bottom,nodeRadius*0.6,0,Math.PI*2);
+            ctx.fillStyle = getRBGA(inputs[i]);
+            ctx.fill();
+        }
+
+
+        for(let i = 0; i<outputs.length; i++)
+        {
+            const x = Visualiser.#getNodeX(outputs,i,left,right);
+            ctx.beginPath();
+            ctx.arc(x,top,nodeRadius*0.6,0,Math.PI*2);
+            ctx.fillStyle = getRBGA(outputs[i]);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.arc(x,top,nodeRadius, 0, Math.PI*2);
+            ctx.strokeStyle = getRBGA(biases[i]);
+            ctx.setLineDash([3,3]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            if(outputLabels[i])
+            {
+               
+                ctx.beginPath();
+                ctx.textAlign = "center";
+                ctx.textBaseLine = "middle";
+                ctx.fillStyle = "black";
+                ctx.strokeStyle = "white";
+                ctx.font = (nodeRadius *1.5) + "px Arial";
+                ctx.fillText(outputLabels[i],x,top );
+                ctx.lineWidth = 0.5;
+                ctx.strokeText(outputLabels[i],x,top );
+            }
+        }
+
+
+
+
+       
     }
     
     static #getNodeX(nodes, index, left, right)
