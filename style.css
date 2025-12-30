@@ -6,7 +6,12 @@ body
     text-align: center;
 }
 
-#myCanvas
+#carCanvas
 {
     background: lightblue;
+}
+
+#networkCanvas
+{
+    background: black;
 }
